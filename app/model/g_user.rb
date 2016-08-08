@@ -32,7 +32,7 @@ class Google::Apis::AdminDirectoryV1::User
   # @return [Nil]
   def delete
     response=self.class.service.delete_user self.primary_email
-    self.persisted=true unless response
+    self.persisted=false
     response
   end
 

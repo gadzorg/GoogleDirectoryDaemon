@@ -53,5 +53,6 @@ GorgService.configure do |c|
 
   c.message_handler_map={
     'request.gapps.create' => CreateUserMessageHandler,
+    'request.gapps.delete' => DeleteUserMessageHandler,
   }
 end

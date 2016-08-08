@@ -1,12 +1,22 @@
 require "codeclimate-test-reporter"
 CodeClimate::TestReporter.start
 
-$LOAD_PATH.unshift File.expand_path('../../app', __FILE__)
-require 'gorg_ldap_daemon'
+require 'factory_girl'
 
- ENV['GORG_LDAP_DAEMON_ENV']="test"
+$LOAD_PATH.unshift File.expand_path('../../app', __FILE__)
+require 'google_directory_daemon'
+
+ ENV['GOOGLE_DIRECTORY_DAEMON_ENV']="test"
 
 RSpec.configure do |config|
+
+  config.include FactoryGirl::Syntax::Methods
+
+  config.before(:suite) do
+    FactoryGirl.find_definitions
+  end
+
+
   config.mock_with :rspec do |mocks|
 
     # This option should be set when all dependencies are being loaded
@@ -14,6 +24,7 @@ RSpec.configure do |config|
     # cause any verifying double instantiation for a class that does not
     # exist to raise, protecting against incorrectly spelt names.
     mocks.verify_doubled_constant_names = true
-
   end
 end
+
+require 'support/factories'

@@ -9,11 +9,11 @@ class DefaultAuthorizer
   OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
   def self.authorize
-    user_id=AppConfig.value_at('admin_user_id')
+    user_id=GoogleDirectoryDaemon.config['admin_user_id']
     scope = 'https://www.googleapis.com/auth/admin.directory.user'
-    client_id = Google::Auth::ClientId.from_file(File.join(GoogleDirectoryDaemon.root,'secrets/client_secret.json'))
+    client_id = Google::Auth::ClientId.from_file(File.expand_path("../secrets/client_secret.json",GoogleDirectoryDaemon.root))
     token_store = Google::Auth::Stores::FileTokenStore.new(
-      :file => File.join(GoogleDirectoryDaemon.root,'secrets/tokens.yaml'))
+      :file => File.expand_path("../secrets/tokens.yaml",GoogleDirectoryDaemon.root))    
     authorizer = Google::Auth::UserAuthorizer.new(client_id, scope, token_store)
 
     credentials = authorizer.get_credentials(user_id)

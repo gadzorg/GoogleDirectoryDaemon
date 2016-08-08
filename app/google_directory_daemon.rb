@@ -42,7 +42,7 @@ class GoogleDirectoryDaemon
 
   #Class methods
   def self.env
-    ENV['GORG_LDAP_DAEMON_ENV'] || "development"
+    ENV['GOOGLE_DIRECTORY_DAEMON_ENV'] || "development"
   end
 
   def self.config
@@ -55,12 +55,28 @@ class GoogleDirectoryDaemon
 
   def self.logger
     unless @logger
-      STDOUT.sync = true
+      STDOUT.sync = true #Allow realtime logging in Heroku
       file = File.open(File.expand_path("../logs/#{self.env}.log",self.root), "a+")
       file.sync = true
 #      @logger = Logger.new(file, 'daily')
       @logger = Logger.new(STDOUT)
 
+      @logger.level = case self.config[:logger_level]
+      when "debug"
+        Logger::DEBUG
+      when "info"
+        Logger::INFO
+      when "warn"
+        Logger::WARN
+      when "error"
+        Logger::ERROR
+      when "fatal"
+        Logger::FATAL
+      when "unknown"
+        Logger::UNKNOWN
+      else
+        Logger::DEBUG
+      end
     end
     @logger
   end
