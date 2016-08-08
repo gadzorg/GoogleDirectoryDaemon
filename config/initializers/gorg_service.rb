@@ -23,6 +23,8 @@ GorgService.configure do |c|
   c.rabbitmq_host=GoogleDirectoryDaemon.config['rabbitmq_host']
   c.rabbitmq_port=GoogleDirectoryDaemon.config['rabbitmq_port']
   c.rabbitmq_vhost=GoogleDirectoryDaemon.config['rabbitmq_vhost']
+
+  c.rabbitmq_queue_name=GoogleDirectoryDaemon.config['rabbitmq_queue_name']
   #
   #
   # c.rabbitmq_queue_name = c.application_name
@@ -46,7 +48,10 @@ GorgService.configure do |c|
   #   "Another.routing.key" => OtherMessageHandler,
   #   "third.routing.key" => MyMessageHandler,
   # }
-  c.message_handler_map=GoogleDirectoryDaemon.config['message_handler_map'].each_with_object({}) do |(key,value),result|
-    result[key]=Object.const_get(value)
-  end
+
+  c.logger=GoogleDirectoryDaemon.logger
+
+  c.message_handler_map={
+    'request.gapps.create' => CreateUserMessageHandler,
+  }
 end

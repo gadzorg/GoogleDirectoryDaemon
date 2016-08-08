@@ -1,0 +1,24 @@
+default: &default
+  application_name: GorgLdapDaemon
+  application_id: ldapd-t
+
+  rabbitmq_host: 
+  rabbitmq_port: 
+  rabbitmq_vhost: 
+  rabbitmq_queue_name: ldapd
+  rabbitmq_exchange_name: agoram_event_exchange
+  rabbitmq_deferred_time: 1000
+  rabbitmq_max_attempts: 5
+  rabbitmq_user: 
+  rabbitmq_password: 
+
+
+  log_routing_key: "agoram.log"
+
+  gram_api_host: https://gram-api-2.herokuapp.com/api/v2/
+  gram_api_user: 
+  gram_api_password: 
+
+
+development:
+  <<: *default

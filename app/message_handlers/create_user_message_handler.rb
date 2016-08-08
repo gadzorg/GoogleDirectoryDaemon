@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-class CreateUserMessageHandler < GorgService::MessageHandler
+class CreateUserMessageHandler < BaseMessageHandler
   # Respond to routing key: request.gapps.create
 
-  def initialize msg
-    data=prepare_data(msg.data)
+  def process
+    data=msg.data
     create_user(data)
   end
 

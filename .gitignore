@@ -1,3 +1,15 @@
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
+/build/
+/config/config.yml
+/logs/*.log
+/secrets
+.byebug_history
+*.gem
 *.sublime-*
-config/config.yml
-secrets/*

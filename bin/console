@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "gram_v1_client"
 require "gorg_service"
 
 
-BIN_BASE_PATH=File.expand_path('..',File.dirname(__FILE__))
-require File.join(BIN_BASE_PATH,"google_directory_daemon.rb")
+$LOAD_PATH.unshift File.expand_path('../app',File.dirname(__FILE__))
+require 'google_directory_daemon'
 
 # You can add fixtures and/or initialization code here to make experimenting
 # with your gem easier. You can also use a different console, if you like.

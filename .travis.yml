@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+  - 2.2.2
+before_install: gem install bundler -v 1.11.2
+before_script:
+  - cp config/config.travis.yml config/config.yml
+script:
+  - bundle exec rspec
+addons:
+  code_climate:
+      repo_token: 64e1043b9bd0f931bbe0a333411d1aeb92f91748e3a21397a0d169f13ae0c970
