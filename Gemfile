@@ -11,9 +11,10 @@ gem 'googleauth'
 
 gem "codeclimate-test-reporter", group: :test, require: nil
 
+gem 'byebug'
+
 group :development, :test do
   gem 'rspec'
-  gem 'byebug'
   gem 'bogus'
   gem "factory_girl", "~> 4.0"
 end

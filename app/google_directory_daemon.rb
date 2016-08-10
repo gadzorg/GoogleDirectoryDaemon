@@ -3,6 +3,8 @@
 
 require 'yaml'
 require 'gorg_service'
+require 'byebug'
+
 
 $LOAD_PATH.unshift File.expand_path('..', __FILE__)
 
@@ -56,9 +58,6 @@ class GoogleDirectoryDaemon
   def self.logger
     unless @logger
       STDOUT.sync = true #Allow realtime logging in Heroku
-      file = File.open(File.expand_path("../logs/#{self.env}.log",self.root), "a+")
-      file.sync = true
-#      @logger = Logger.new(file, 'daily')
       @logger = Logger.new(STDOUT)
 
       @logger.level = case self.config[:logger_level]

@@ -15,17 +15,13 @@ class GramToGoogleService
       primary_email: @gram_account.gapps_email,
       external_ids:[
         {
-          type: "account",
-          value: @gram_account.uuid
-        },
-        {
           type: "custom",
-          customType: "uuid",
-          value: @gram_account.uuid
+          customType: "id_soce",
+          value: @gram_account.id_soce
         },
         {
           type: "organization",
-          value: @gram_account.id_soce
+          value: @gram_account.uuid
         },
       ]
     }

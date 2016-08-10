@@ -14,12 +14,21 @@ class BaseMessageHandler < GorgService::MessageHandler
   def initialize incoming_msg
     @msg=incoming_msg
 
-    # validate_payload method should be implemented by children classes
-    validate_payload
 
     begin
+      # validate_payload method should be implemented by children classes
+      validate_payload
+
       # process method should be implemented by children classes
       process
+
+    rescue GorgService::HardfailError
+      raise
+    rescue GorgService::SoftfailError
+      raise
+    rescue StandardError => e
+      GoogleDirectoryDaemon.logger.fatal "Uncatched exception : #{e.inspect}"
+      raise_hardfail("Uncatched exception", error: e)
     end
   end
 

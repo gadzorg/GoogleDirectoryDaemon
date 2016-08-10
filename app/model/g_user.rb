@@ -19,7 +19,7 @@ class Google::Apis::AdminDirectoryV1::User
   #  Google::Apis::AdminDirectoryV1::User updated with Google Directory data
   def save
     if persisted?
-      self.update_from_user_obj!(self.class.service.patch_user(self.primary_email, self))
+      self.update_from_user_obj!(self.class.service.patch_user(self.id, self))
     else
       self.update_from_user_obj!(self.class.service.insert_user(self))
     end
@@ -31,7 +31,7 @@ class Google::Apis::AdminDirectoryV1::User
   #
   # @return [Nil]
   def delete
-    response=self.class.service.delete_user self.primary_email
+    response=self.class.service.delete_user self.self.id
     self.persisted=false
     response
   end
@@ -48,7 +48,8 @@ class Google::Apis::AdminDirectoryV1::User
       return true
     else
       self.persisted = false
-      if self.class.find self.primary_email
+      if gu=self.class.find(self.id||self.primary_email)
+        self.id=gu.id
         self.persisted = true
         return true
       else
@@ -57,20 +58,21 @@ class Google::Apis::AdminDirectoryV1::User
     end
   end
 
+
   # Refresh current User with Google Directory data
   # Return nil if not persisted yet
   def refresh
     if persisted?
-      self.update_from_user_obj!(self.class.find self.primary_email)
+      self.update_from_user_obj!(self.class.find self.id)
     end
   end
 
   # Lookup requested email in Google Directory
   # @return [Google::Apis::AdminDirectoryV1::User]
   #  or nil if not found
-  def self.find user_adress
+  def self.find user_key
     begin
-      user=service.get_user user_adress
+      user=service.get_user user_key
       user.persisted=true
       user
     rescue Google::Apis::ClientError => e
