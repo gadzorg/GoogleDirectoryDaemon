@@ -65,6 +65,7 @@ class DefaultAuthorizer
           @token_store=Google::Auth::Stores::FileTokenStore.new( :file => File.expand_path("../secrets/tokens.yaml",GoogleDirectoryDaemon.root))
         end
       end
+      @token_store
     end
 
   end
