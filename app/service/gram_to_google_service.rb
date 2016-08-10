@@ -12,7 +12,6 @@ class GramToGoogleService
       },
       password: @gram_account.password,
       hash_function: "SHA-1",
-      primary_email: @gram_account.gapps_email,
       external_ids:[
         {
           type: "custom",

@@ -19,12 +19,10 @@ class BaseMessageHandler < GorgService::MessageHandler
       # validate_payload method should be implemented by children classes
       validate_payload
 
-      # process method should be implemented by children classes
+      # process method must be implemented by children classes
       process
 
-    rescue GorgService::HardfailError
-      raise
-    rescue GorgService::SoftfailError
+    rescue GorgService::HardfailError, GorgService::SoftfailError
       raise
     rescue StandardError => e
       GoogleDirectoryDaemon.logger.fatal "Uncatched exception : #{e.inspect}"
@@ -43,7 +41,7 @@ class BaseMessageHandler < GorgService::MessageHandler
   # If not, raise hardfail
   def process
     GoogleDirectoryDaemon.logger.error("#{self.class} doesn't implement process()")
-    raise_hardfail("#{self.class} doesn't implement process()", UnimplementedMessageHandlerError)
+    raise_hardfail("#{self.class} doesn't implement process()", error: UnimplementedMessageHandlerError)
   end
 
   # validate_payload MAY be implemented

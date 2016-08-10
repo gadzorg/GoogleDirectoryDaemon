@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 GUser=Google::Apis::AdminDirectoryV1::User
-class Google::Apis::AdminDirectoryV1::User
+class GUser
   #
   # Add methods to Google::Apis::AdminDirectoryV1::User to have a pseudo
   # ActiveModel behaviour
@@ -10,6 +10,10 @@ class Google::Apis::AdminDirectoryV1::User
   # @return [Boolean]
   #  Used to cache existence of this user in Google Apps Directory
   attr_accessor :persisted
+
+  def all_aliases
+    (self.non_editable_aliases||[]) + (self.aliases||[])
+  end
 
 
   # Save user data in Google Apps Directory either by patching existing
