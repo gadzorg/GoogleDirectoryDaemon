@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
+
+require 'google/apis/admin_directory_v1'
 GUser=Google::Apis::AdminDirectoryV1::User
 class GUser
   #
