@@ -3,6 +3,7 @@
 
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
+require 'googleauth/stores/redis_token_store'
 require 'json'
 
 class DefaultAuthorizer
@@ -57,7 +58,13 @@ class DefaultAuthorizer
 
     # Set token_store if not defined
     def token_store
-      @token_store||=Google::Auth::Stores::FileTokenStore.new( :file => File.expand_path("../secrets/tokens.yaml",GoogleDirectoryDaemon.root))
+      unless @token_store
+        if GoogleDirectoryDaemon.config['redis_url']
+          @token_store=Google::Auth::Stores::RedisTokenStore.new( redis: Redis.new(url:GoogleDirectoryDaemon.config['redis_url']))
+        else
+          @token_store=Google::Auth::Stores::FileTokenStore.new( :file => File.expand_path("../secrets/tokens.yaml",GoogleDirectoryDaemon.root))
+        end
+      end
     end
 
   end

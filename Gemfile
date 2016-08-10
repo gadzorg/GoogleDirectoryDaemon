@@ -8,6 +8,7 @@ gem 'gram_v1_client'
 gem 'google-api-client'
 gem 'googleauth'
 
+gem 'redis', '~>3.2'
 
 gem "codeclimate-test-reporter", group: :test, require: nil
 
