@@ -34,11 +34,11 @@ GorgService.configure do |c|
   c.rabbitmq_deferred_time=GoogleDirectoryDaemon.config['rabbitmq_deferred_time']
   # 
   # maximum number of try before discard a message
-  c.rabbitmq_deferred_time=GoogleDirectoryDaemon.config['rabbitmq_max_attempts']
+  c.rabbitmq_max_attempts=GoogleDirectoryDaemon.config['rabbitmq_max_attempts']
   #
   # The routing key used when sending a message to the central log system (Hardfail or Warning)
   # Central logging is disable if nil
-  c.rabbitmq_deferred_time=GoogleDirectoryDaemon.config['rlog_routing_key']
+  c.log_routing_key=GoogleDirectoryDaemon.config['log_routing_key']
   #
   # Routing hash
   #  map routing_key of received message with MessageHandler 
