@@ -16,16 +16,34 @@ class BaseMessageHandler < GorgService::MessageHandler
 
 
     begin
-      # validate_payload method should be implemented by children classes
-      validate_payload
 
-      # process method must be implemented by children classes
-      process
+
+      begin
+
+        # validate_payload method should be implemented by children classes
+        validate_payload
+
+        # process method must be implemented by children classes
+        process
+
+      rescue Google::Apis::ClientError =>e
+        if e.message.start_with? "dailyLimitExceeded"
+          GoogleDirectoryDaemon.logger.error e.message
+          raise_softfail("Google API Quota exceeded", error: e.message)
+        end
+        raise
+      rescue Faraday::ConnectionFailed => e
+        raise_google_connection_error
+      end
+
+
+
 
     rescue GorgService::HardfailError, GorgService::SoftfailError
       raise
+    
     rescue StandardError => e
-      GoogleDirectoryDaemon.logger.fatal "Uncatched exception : #{e.inspect}"
+      GoogleDirectoryDaemon.logger.error "Uncatched exception : #{e.inspect}"
       raise_hardfail("Uncatched exception", error: e)
     end
   end
@@ -59,6 +77,11 @@ class BaseMessageHandler < GorgService::MessageHandler
   def raise_gram_connection_error
     GoogleDirectoryDaemon.logger.error("Unable to connect to GrAM API server")
     raise_softfail("Unable to connect to GrAM API server")
+  end
+
+  def raise_google_connection_error
+    GoogleDirectoryDaemon.logger.error("Unable to connect to Google API")
+    raise_softfail("Unable to connect  to Google API")
   end
 
   def raise_gram_account_not_found(value)

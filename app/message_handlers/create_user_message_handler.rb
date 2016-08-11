@@ -48,8 +48,8 @@ class CreateUserMessageHandler < BaseMessageHandler
     raise_already_registered_google_account if @gram_account.gapps_id
 
     service=GramToGoogleService.new(@gram_account)
-    GoogleDirectoryDaemon.logger.debug {service.to_hash.merge({password:"HIDDEN"})}
     gu=service.to_google_user
+    GoogleDirectoryDaemon.logger.debug {service.to_hash.merge({password:"HIDDEN"})}
 
     gu.primary_email= primary_email
   
@@ -62,8 +62,7 @@ class CreateUserMessageHandler < BaseMessageHandler
         GoogleDirectoryDaemon.logger.error("Google Account #{primary_email} already exists")
         raise_hardfail("Google Account #{primary_email} already exists")
       else
-        GoogleDirectoryDaemon.logger.error("Error when saving #{gu.primary_email} : #{e.inspect}")
-        raise_hardfail "Invalid Data", error: e
+        raise
       end
     end
 
@@ -95,7 +94,7 @@ class CreateUserMessageHandler < BaseMessageHandler
   def primary_email
     msg.data[:primary_email]
   end
-  
+
   def aliases
     msg.data[:aliases]
   end

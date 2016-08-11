@@ -62,8 +62,7 @@ class UpdateUserMessageHandler < BaseMessageHandler
         GoogleDirectoryDaemon.logger.error("Google Account #{gu.id} does not exists")
         raise_hardfail("Google Account #{gu.id} does not exists")
       else
-        GoogleDirectoryDaemon.logger.error("Error when saving #{gu.primary_email} : #{e.message}")
-        raise_hardfail "Invalid Data", error: e
+        raise
       end
     end
 
