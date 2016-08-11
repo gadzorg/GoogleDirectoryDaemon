@@ -9,7 +9,7 @@ FactoryGirl.define do
     birthname nil
     birth_firstname nil
     email "user_1@batchexample.com"
-    gapps_email "user_1@poubs.org"
+    gapps_id "100210089258909044230"
     birthdate nil
     deathdate nil
     gender nil

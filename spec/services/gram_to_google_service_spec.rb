@@ -16,7 +16,6 @@ RSpec.describe GramToGoogleService, type: :service do
       },
       :password=>"96dcd4c1f74f7a2eed974365c0bf9ec434ff31f6",
       :hash_function=>"SHA-1",
-      :primary_email=>"user_1@poubs.org",
       :external_ids=>[
         {:type=>"custom", customType:"id_soce", :value=>123489},
         {:type=>"organization", :value=>"bfd1c2a2-9876-41f8-8a6a-a7caaa7019e7"},
@@ -33,7 +32,6 @@ RSpec.describe GramToGoogleService, type: :service do
     expect(gu.name).to eq({:given_name=>"Berniece", :family_name=>"Welch"})
     expect(gu.password).to eq("96dcd4c1f74f7a2eed974365c0bf9ec434ff31f6")
     expect(gu.hash_function).to eq("SHA-1")
-    expect(gu.primary_email).to eq("user_1@poubs.org")
     expect(gu.external_ids).to match_array([{:type=>"custom", customType:"id_soce", :value=>123489},
         {:type=>"organization", :value=>"bfd1c2a2-9876-41f8-8a6a-a7caaa7019e7"},])
   end
