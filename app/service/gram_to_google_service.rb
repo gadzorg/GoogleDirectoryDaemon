@@ -6,6 +6,7 @@ class GramToGoogleService
 
   def to_hash
     {
+      id: @gram_account.gapps_id,
       name: {
         given_name: @gram_account.firstname,
         family_name: @gram_account.lastname,

@@ -60,7 +60,7 @@ class GoogleDirectoryDaemon
       STDOUT.sync = true #Allow realtime logging in Heroku
       @logger = Logger.new(STDOUT)
 
-      @logger.level = case self.config[:logger_level]
+      @logger.level = case self.config[:logger_level].downcase
       when "debug"
         Logger::DEBUG
       when "info"

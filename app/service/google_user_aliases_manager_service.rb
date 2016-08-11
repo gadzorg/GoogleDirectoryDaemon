@@ -32,14 +32,19 @@ class GoogleUserAliasesManagerService
     GoogleDirectoryDaemon.logger.debug "Aliases to add  : #{to_create_aliases}"
     GoogleDirectoryDaemon.logger.debug "Aliases to del  : #{to_remove_aliases}"
 
-    gservice.batch do
-      to_remove_aliases.each do |a|
-        remove_alias a
-      end
+    if to_remove_aliases.any?||to_create_aliases.any?
+      gservice.batch do
+        to_remove_aliases.each do |a|
+          remove_alias a
+        end
 
-      to_create_aliases.each do |a|
-        add_alias a
+        to_create_aliases.each do |a|
+          add_alias a
+        end
       end
+      GoogleDirectoryDaemon.logger.info "Aliases for #{@user.id} updated"
+    else
+      GoogleDirectoryDaemon.logger.info "Aliases for #{@user.id} have not changed"
     end
   end
 
