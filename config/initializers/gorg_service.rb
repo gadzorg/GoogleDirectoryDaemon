@@ -52,8 +52,8 @@ GorgService.configure do |c|
   c.logger=GoogleDirectoryDaemon.logger
 
   c.message_handler_map={
-    'request.gapps.create' => CreateUserMessageHandler,
-    'request.gapps.update' => UpdateUserMessageHandler,
-    'request.gapps.delete' => DeleteUserMessageHandler,
+    'request.googleapps.user.create' => CreateUserMessageHandler,
+    'request.googleapps.user.update' => UpdateUserMessageHandler,
+    'request.goggleapps.user.delete' => DeleteUserMessageHandler,
   }
 end
