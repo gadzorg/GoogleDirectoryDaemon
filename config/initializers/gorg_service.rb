@@ -54,6 +54,6 @@ GorgService.configure do |c|
   c.message_handler_map={
     'request.googleapps.user.create' => CreateUserMessageHandler,
     'request.googleapps.user.update' => UpdateUserMessageHandler,
-    'request.goggleapps.user.delete' => DeleteUserMessageHandler,
+    'request.googleapps.user.delete' => DeleteUserMessageHandler,
   }
 end
