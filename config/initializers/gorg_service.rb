@@ -55,5 +55,6 @@ GorgService.configure do |c|
     'request.googleapps.user.create' => CreateUserMessageHandler,
     'request.googleapps.user.update' => UpdateUserMessageHandler,
     'request.googleapps.user.delete' => DeleteUserMessageHandler,
+    'notify.account.updated'         => GramAccountUpdatedMessageHandler,
   }
 end
