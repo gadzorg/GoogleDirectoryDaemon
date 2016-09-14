@@ -84,7 +84,17 @@ class CreateUserMessageHandler < BaseMessageHandler
         GoogleUserAliasesManagerService.new(gu,aliases).process
       end
     end
+   
+    notify_success(uuid,gu.id)
 
+  end
+
+  def notify_success(_uuid,google_id)
+    data={
+      uuid: _uuid
+      google_id: google_id
+    }
+    GorgMessageSender.send_message(data,"notify.googleapps.user.created")
   end
 
   def uuid

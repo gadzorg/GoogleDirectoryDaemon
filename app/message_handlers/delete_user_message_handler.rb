@@ -24,11 +24,19 @@ class DeleteUserMessageHandler < BaseMessageHandler
 
     begin
       gu.delete
-      GoogleDirectoryDaemon.logger.info("Successfully deleted account #{gu.primary_email}")
+      GoogleDirectoryDaemon.logger.info("Succesfully deleted account #{gu.primary_email}")
+      notify_success(@key)
     rescue Google::Apis::ClientError => e
        GoogleDirectoryDaemon.logger.error("Error when deleting #{gu.primary_email} : #{e.inspect}")
       raise_hardfail "Google apps error", error: e
     end
+  end
+
+  def notify_success(key)
+    data={
+      key: key
+    }
+    GorgMessageSender.send_message(data,"notify.googleapps.user.deleted")
   end
 
 

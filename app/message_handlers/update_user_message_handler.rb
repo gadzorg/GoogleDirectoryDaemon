@@ -72,6 +72,16 @@ class UpdateUserMessageHandler < BaseMessageHandler
       end
     end
 
+    notify_success(uuid,@gram_account.gapps_id)
+
+  end
+
+  def notify_success(_uuid,google_id)
+    data={
+      uuid: _uuid
+      google_id: google_id
+    }
+    GorgMessageSender.send_message(data,"notify.googleapps.user.updated")
   end
 
   def uuid
