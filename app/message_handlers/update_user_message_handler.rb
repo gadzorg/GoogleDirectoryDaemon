@@ -81,7 +81,7 @@ class UpdateUserMessageHandler < BaseMessageHandler
       uuid: _uuid,
       google_id: google_id
     }
-    GorgMessageSender.send_message(data,"notify.googleapps.user.updated")
+    GorgMessageSender.new.send_message(data,"notify.googleapps.user.updated")
   end
 
   def uuid
