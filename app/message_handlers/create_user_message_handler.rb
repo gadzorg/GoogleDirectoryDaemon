@@ -70,6 +70,7 @@ class CreateUserMessageHandler < BaseMessageHandler
       @gram_account.gapps_id= gu.id
       if @gram_account.save
         GoogleDirectoryDaemon.logger.info "Gram account #{uuid} successfully updated with google id #{gu.id}"
+        notify_success(uuid,gu.id)
       else
         GoogleDirectoryDaemon.logger.error("Unable to update GrAM gapps_id of account #{uuid}" )
         raise_hardfail("Unable to update GrAM gapps_id of account #{uuid}")
@@ -85,7 +86,6 @@ class CreateUserMessageHandler < BaseMessageHandler
       end
     end
    
-    notify_success(uuid,gu.id)
 
   end
 
