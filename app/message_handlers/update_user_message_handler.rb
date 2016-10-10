@@ -44,35 +44,38 @@ class UpdateUserMessageHandler < BaseMessageHandler
   def process
     @gram_account=retrieve_gram_data
     GoogleDirectoryDaemon.logger.debug("Gram account :\n #{@gram_account.inspect}")
-
-    raise_no_registered_google_account unless @gram_account.gapps_id
-
-    service=GramToGoogleService.new(@gram_account)
-    gu=service.to_google_user
-    GoogleDirectoryDaemon.logger.debug {"Google User params : #{gu.to_h.merge({password:"HIDDEN"})}"}
-
-    gu.primary_email= primary_email if primary_email
   
-    begin
-      gu=GUser.service.patch_user(gu.id, gu)
-      GoogleDirectoryDaemon.logger.info "Google account  #{gu.id} (#{gu.primary_email}) successfully updated"
-    rescue Google::Apis::ClientError => e
-      case e.message
-      when "notFound: Resource Not Found: userKey"
-        GoogleDirectoryDaemon.logger.error("Google Account #{gu.id} does not exists")
-        raise_hardfail("Google Account #{gu.id} does not exists")
-      else
-        raise
-      end
-    end
+    unless @gram_account.gapps_id
+      #raise_no_registered_google_account 
+    else
 
-    if aliases
+      service=GramToGoogleService.new(@gram_account)
+      gu=service.to_google_user
+      GoogleDirectoryDaemon.logger.debug {"Google User params : #{gu.to_h.merge({password:"HIDDEN"})}"}
+
+      gu.primary_email= primary_email if primary_email
+
       begin
-        GoogleUserAliasesManagerService.new(gu,aliases).process
+        gu=GUser.service.patch_user(gu.id, gu)
+        GoogleDirectoryDaemon.logger.info "Google account  #{gu.id} (#{gu.primary_email}) successfully updated"
+      rescue Google::Apis::ClientError => e
+        case e.message
+        when "notFound: Resource Not Found: userKey"
+          GoogleDirectoryDaemon.logger.error("Google Account #{gu.id} does not exists")
+          raise_hardfail("Google Account #{gu.id} does not exists")
+        else
+          raise
+        end
       end
-    end
 
-    notify_success(uuid,@gram_account.gapps_id)
+      if aliases
+        begin
+          GoogleUserAliasesManagerService.new(gu,aliases).process
+        end
+      end
+
+      notify_success(uuid,@gram_account.gapps_id)
+    end
 
   end
 
