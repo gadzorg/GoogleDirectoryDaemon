@@ -94,7 +94,7 @@ class CreateUserMessageHandler < BaseMessageHandler
       uuid: _uuid.to_s,
       google_id: google_id.to_s
     }
-    GorgMessageSender.send_message(data,"notify.googleapps.user.created")
+    GorgMessageSender.new.send_message(data,"notify.googleapps.user.created")
   end
 
   def uuid
