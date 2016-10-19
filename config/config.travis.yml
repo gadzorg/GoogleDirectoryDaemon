@@ -2,15 +2,15 @@ default: &default
   application_name: GorgLdapDaemon
   application_id: ldapd-t
 
-  rabbitmq_host: 
-  rabbitmq_port: 
-  rabbitmq_vhost: 
+  rabbitmq_host: localhost
+  rabbitmq_port: 5672
+  rabbitmq_vhost: "/"
   rabbitmq_queue_name: ldapd
   rabbitmq_exchange_name: agoram_event_exchange
   rabbitmq_deferred_time: 1000
   rabbitmq_max_attempts: 5
-  rabbitmq_user: 
-  rabbitmq_password: 
+  rabbitmq_user: guest
+  rabbitmq_password: guest
 
 
   log_routing_key: "agoram.log"
