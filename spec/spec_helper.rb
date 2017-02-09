@@ -3,10 +3,11 @@ CodeClimate::TestReporter.start
 
 require 'factory_girl'
 
-$LOAD_PATH.unshift File.expand_path('../../app', __FILE__)
-require 'google_directory_daemon'
+APP_PATH = File.expand_path('../../config/boot', __FILE__)
+ENV['RAKE_ENV']="test"
 
- ENV['GOOGLE_DIRECTORY_DAEMON_ENV']="test"
+require APP_PATH
+
 
 RSpec.configure do |config|
 
