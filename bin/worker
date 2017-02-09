@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
-$LOAD_PATH.unshift File.expand_path('../../app', __FILE__)
-require "google_directory_daemon"
 
-GoogleDirectoryDaemon.new.run
+require "bundler/setup"
+APP_PATH = File.expand_path('../../config/boot', __FILE__)
+
+require APP_PATH
+
+Application.new.run

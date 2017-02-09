@@ -8,95 +8,30 @@
 #  - validate_payload() : method used to validate message's payload format
 #                         Returns a boolean (true = valid, false = invalid)
 #                         If not implemented, returns true
-class BaseMessageHandler < GorgService::MessageHandler
-  # Respond to routing key: request.gapps.create
 
-  def initialize incoming_msg
-    @msg=incoming_msg
+class GorgService::Consumer::MessageHandler::Base
 
-
-    begin
-
-
-      begin
-
-        # validate_payload method should be implemented by children classes
-        validate_payload
-
-        # process method must be implemented by children classes
-        process
-
-      rescue Google::Apis::ClientError =>e
-        if e.message.start_with? "dailyLimitExceeded"
-          GoogleDirectoryDaemon.logger.error e.message
-          raise_softfail("Google API Quota exceeded", error: e.message)
-        end
-        raise
-      rescue Faraday::ConnectionFailed => e
-        raise_google_connection_error
-      end
-
-
-
-
-    rescue GorgService::HardfailError, GorgService::SoftfailError
-      raise
-    
-    rescue StandardError => e
-      GoogleDirectoryDaemon.logger.error "Uncatched exception : #{e.inspect}"
-      raise_hardfail("Uncatched exception", error: e)
+    handle_error ActiveResource::ServerError do |error,_message|
+      Application.logger.error("Unable to connect to GrAM API server")
+      raise_softfail("GramConnectionError", error: error)
     end
-  end
 
-  #convenience method
-  def msg
-    @msg
-  end
+    handle_error GramV2Client::ResourceNotFound do |error,_message|
+      Application.logger.error(error.inspect)
+      raise_hardfail("AccountNotFound",error: error)
+    end
 
-  ## Children implemented methods
+    handle_error Faraday::ConnectionFailed do |error,_message|
+        Application.logger.error("Unable to connect to Google API")
+        raise_softfail("GoogleAPIConnectionError", error: error)
+    end
 
-  # process MUST be implemented
-  # If not, raise hardfail
-  def process
-    GoogleDirectoryDaemon.logger.error("#{self.class} doesn't implement process()")
-    raise_hardfail("#{self.class} doesn't implement process()", error: UnimplementedMessageHandlerError)
-  end
-
-  # validate_payload MAY be implemented
-  # If not, assumes messages is valid, log a warning and returns true
-  def validate_payload
-    GoogleDirectoryDaemon.logger.warn("#{self.class} doesn't validate_payload(), assume payload is valid")
-    true
-  end
-
-
-  ## Errors management
-
-
-  # To be raised in case of connection errors with Gram API server
-  def raise_gram_connection_error
-    GoogleDirectoryDaemon.logger.error("Unable to connect to GrAM API server")
-    raise_softfail("Unable to connect to GrAM API server")
-  end
-
-  def raise_google_connection_error
-    GoogleDirectoryDaemon.logger.error("Unable to connect to Google API")
-    raise_softfail("Unable to connect  to Google API")
-  end
-
-  def raise_gram_account_not_found(value)
-    GoogleDirectoryDaemon.logger.error("Account not found in Gram - UUID= #{value}")
-    raise_hardfail("Account not found in Gram - UUID= #{value}",error: GramAccountNotFoundError)
-  end
-
-  def raise_not_updated_group(ldap_group)
-    GoogleDirectoryDaemon.logger.error("Unable to save group #{ldap_group.cn} : #{ldap_group.errors.messages.inspect}")
-    raise_hardfail("Unable to save group #{ldap_group.cn} : #{ldap_group.errors.messages.inspect}")
-  end
+    handle_error Google::Apis::ClientError do |error, _message|
+      if e.message.start_with? "dailyLimitExceeded"
+        GoogleDirectoryDaemon.logger.error e.message
+        raise_softfail("Google API Quota exceeded", error: e.message)
+      else
+        raise error
+      end
+    end
 end
-
-## Error classes
-
-class InvalidPayloadError < StandardError; end
-class UnimplementedMessageHandlerError < StandardError; end
-class GramAccountNotFoundError < StandardError; end

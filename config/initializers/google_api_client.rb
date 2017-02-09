@@ -1,1 +1,1 @@
-Google::Apis.logger = GoogleDirectoryDaemon.logger
+Google::Apis.logger = Application.logger

@@ -1,18 +1,11 @@
 #!/usr/bin/env ruby
 
 require "bundler/setup"
-require "gorg_service"
+APP_PATH = File.expand_path('../../config/boot', __FILE__)
+
+require APP_PATH
 
 
-$LOAD_PATH.unshift File.expand_path('../app',File.dirname(__FILE__))
-require 'google_directory_daemon'
-
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
-
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
 
 require "irb"
 IRB.start

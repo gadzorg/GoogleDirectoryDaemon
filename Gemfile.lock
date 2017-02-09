@@ -59,12 +59,10 @@ GEM
     gorg_message_sender (1.4.5)
       bunny (~> 2.2, >= 2.2.2)
       json-schema (~> 2.6)
-    gorg_service (4.1.0)
+    gorg_service (5.1.0)
       bunny (~> 2.2, >= 2.2.2)
-      gorg_message_sender (~> 1)
+      gorg_message_sender (~> 1.4.2)
       json-schema (~> 2.6)
-    gram_v1_client (1.0.0)
-      activeresource (~> 4.0)
     httpclient (2.8.2.4)
     hurley (0.2)
     i18n (0.7.0)
@@ -128,12 +126,10 @@ DEPENDENCIES
   factory_girl (~> 4.0)
   google-api-client
   googleauth
-  gorg_message_sender
-  gorg_service
-  gram_v1_client
+  gorg_service (~> 5.1)
   gram_v2_client!
   redis (~> 3.2)
   rspec
 
 BUNDLED WITH
-   1.12.5
+   1.13.6

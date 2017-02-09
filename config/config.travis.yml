@@ -6,7 +6,7 @@ default: &default
   rabbitmq_port: 5672
   rabbitmq_vhost: "/"
   rabbitmq_queue_name: ldapd
-  rabbitmq_exchange_name: agoram_event_exchange
+  rabbitmq_event_exchange_name: agoram_event_exchange
   rabbitmq_deferred_time: 1000
   rabbitmq_max_attempts: 5
   rabbitmq_user: guest

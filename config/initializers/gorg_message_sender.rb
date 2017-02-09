@@ -1,16 +1,16 @@
 GorgMessageSender.configure do |c|
 
   # Id used to set the event_sender_id
-  c.application_id = GoogleDirectoryDaemon.config["application_id"]
+  c.application_id = Application.config["application_id"]
 
   # RabbitMQ network and authentification
-  c.host = GoogleDirectoryDaemon.config['rabbitmq_host']
-  c.port = GoogleDirectoryDaemon.config['rabbitmq_port']
-  c.vhost = GoogleDirectoryDaemon.config['rabbitmq_vhost']
-  c.user = GoogleDirectoryDaemon.config['rabbitmq_user']
-  c.password = GoogleDirectoryDaemon.config['rabbitmq_password']
+  c.host = Application.config['rabbitmq_host']
+  c.port = Application.config['rabbitmq_port']
+  c.vhost = Application.config['rabbitmq_vhost']
+  c.user = Application.config['rabbitmq_user']
+  c.password = Application.config['rabbitmq_password']
 
   # Exchange configuration
-  c.exchange_name = GoogleDirectoryDaemon.config['rabbitmq_exchange_name']   
+  c.exchange_name = Application.config['rabbitmq_exchange_name']
   c.durable_exchange= true
 end

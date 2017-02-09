@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-class DeleteUserMessageHandler < BaseMessageHandler
+class DeleteUserMessageHandler < GorgService::Consumer::MessageHandler::Base
   # Respond to routing key: request.gapps.delete
 
   def process
@@ -9,25 +9,25 @@ class DeleteUserMessageHandler < BaseMessageHandler
     #The value can be the user's primary email address, alias email address, or unique user ID.
     @key=msg.data[:google_account_key]
 
-    GoogleDirectoryDaemon.logger.debug("Received key = #{@key}")
+    Application.logger.debug("Received key = #{@key}")
 
     begin
       gu=GUser.find(@key)
     rescue Google::Apis::ClientError => e
-       GoogleDirectoryDaemon.logger.error("Error when retrieving google account #{@key} : #{e.inspect}")
+      Application.logger.error("Error when retrieving google account #{@key} : #{e.inspect}")
       raise_hardfail "Google apps error", error: e
     end
 
     raise_google_account_not_found unless gu
-    GoogleDirectoryDaemon.logger.debug {"Google account #{@key} primary email = #{gu.primary_email}"} if gu.primary_email != @key
+    Application.logger.debug {"Google account #{@key} primary email = #{gu.primary_email}"} if gu.primary_email != @key
 
 
     begin
       gu.delete
-      GoogleDirectoryDaemon.logger.info("Succesfully deleted account #{gu.primary_email}")
+      Application.logger.info("Succesfully deleted account #{gu.primary_email}")
       notify_success(@key)
     rescue Google::Apis::ClientError => e
-       GoogleDirectoryDaemon.logger.error("Error when deleting #{gu.primary_email} : #{e.inspect}")
+       Application.logger.error("Error when deleting #{gu.primary_email} : #{e.inspect}")
       raise_hardfail "Google apps error", error: e
     end
   end
@@ -41,7 +41,7 @@ class DeleteUserMessageHandler < BaseMessageHandler
 
 
   def raise_google_account_not_found
-    GoogleDirectoryDaemon.logger.error("Google account #{@key} does bot exist")
+    Application.logger.error("Google account #{@key} does bot exist")
     raise_hardfail("Google account #{@key} does bot exist")
   end
   
