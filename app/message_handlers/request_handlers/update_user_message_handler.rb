@@ -2,8 +2,9 @@
 # encoding: utf-8
 require "json-schema"
 
-class UpdateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
-  # Respond to routing key: request.gapps.account.update
+class UpdateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestHandler
+
+  listen_to 'request.googleapps.user.update'
 
   SCHEMA={
       "$schema"=>"http://json-schema.org/draft-04/schema#",
@@ -77,9 +78,10 @@ class UpdateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
   def notify_success(_uuid,google_id)
     data={
       uuid: _uuid,
-      google_id: google_id
+      google_id: google_id,
+      status: :success
     }
-    GorgMessageSender.new.send_message(data,"notify.googleapps.user.updated")
+    reply_with(data)
   end
 
   def uuid

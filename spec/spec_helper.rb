@@ -1,12 +1,16 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+require "simplecov"
+SimpleCov.start
 
 require 'factory_girl'
+
+require 'webmock/rspec'
+WebMock.disable_net_connect!(allow_localhost: true, allow: 'www.googleapis.com')
 
 APP_PATH = File.expand_path('../../config/boot', __FILE__)
 ENV['RAKE_ENV']="test"
 
 require APP_PATH
+
 
 
 RSpec.configure do |config|
@@ -28,4 +32,5 @@ RSpec.configure do |config|
   end
 end
 
+require 'faker'
 require 'support/factories'

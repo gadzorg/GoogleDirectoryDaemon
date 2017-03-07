@@ -1,0 +1,76 @@
+{
+  "name": "GoogleDirectoryDaemon",
+  "description": "",
+  "scripts": {},
+  "env": {
+    "GDD_ADMIN_USER_ID": {
+      "required": true
+    },
+    "GDD_APPLICATION_ID": {
+      "required": true
+    },
+    "GDD_APPLICATION_NAME": {
+      "required": true
+    },
+    "GDD_GOOGLE_CLIENT_SECRET": {
+      "required": false
+    },
+    "GDD_GRAM_API_HOST": {
+      "required": true
+    },
+    "GDD_GRAM_API_PASSWORD": {
+      "required": true
+    },
+    "GDD_GRAM_API_USER": {
+      "required": true
+    },
+    "GDD_LOG_ROUTING_KEY": {
+      "required": true
+    },
+    "GDD_LOGGER_LEVEL": {
+      "required": false
+    },
+    "GDD_RABBITMQ_DEFERRED_TIME": {
+      "required": true
+    },
+    "GDD_RABBITMQ_EXCHANGE_NAME": {
+      "required": true
+    },
+    "GDD_RABBITMQ_HOST": {
+      "required": true
+    },
+    "GDD_RABBITMQ_MAX_ATTEMPTS": {
+      "required": true
+    },
+    "GDD_RABBITMQ_PASSWORD": {
+      "required": true
+    },
+    "GDD_RABBITMQ_PORT": {
+      "required": true
+    },
+    "GDD_RABBITMQ_USER": {
+      "required": true
+    },
+    "GDD_RABBITMQ_VHOST": {
+      "required": true
+    },
+    "GDD_REDIS_URL": {
+      "required": false
+    },
+    "GOOGLE_DIRECTORY_DAEMON_ENV": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    }
+  },
+  "formation": {},
+  "addons": [
+    "heroku-redis"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}

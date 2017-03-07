@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
 # encoding: utf-8
 
-class DeleteUserMessageHandler < GorgService::Consumer::MessageHandler::Base
-  # Respond to routing key: request.gapps.delete
+class DeleteUserMessageHandler < GorgService::Consumer::MessageHandler::RequestHandler
+
+  listen_to 'request.googleapps.user.update'
 
   def process
 

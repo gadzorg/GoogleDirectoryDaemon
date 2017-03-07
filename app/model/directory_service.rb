@@ -8,9 +8,10 @@ class DirectoryService < Google::Apis::AdminDirectoryV1::DirectoryService
   def initialize
     super
     self.client_options.application_name = "test"
-    authorizer = DefaultAuthorizer
+    authorizer = ServiceAccountAuthorizer
     self.authorization = authorizer.authorize
 
     self
   end
 end
+

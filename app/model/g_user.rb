@@ -37,7 +37,7 @@ class GUser
   #
   # @return [Nil]
   def delete
-    response=self.class.service.delete_user self.self.id
+    response=self.class.service.delete_user(self.id) if self.id
     self.persisted=false
     response
   end

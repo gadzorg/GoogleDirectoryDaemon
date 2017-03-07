@@ -2,8 +2,9 @@
 # encoding: utf-8
 require "json-schema"
 
-class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
-  # Respond to routing key: request.gapps.account.create
+class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestHandler
+
+  listen_to 'request.googleapps.user.create'
 
   SCHEMA={
       "$schema"=>"http://json-schema.org/draft-04/schema#",
@@ -37,6 +38,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
   end
 
   def process
+    Application.logger.debug("Process...")
     @gram_account=retrieve_gram_data
     Application.logger.debug("Gram account :\n #{@gram_account.inspect}")
 
@@ -55,7 +57,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
       case e.message
       when "duplicate: Entity already exists."
         Application.logger.error("Google Account #{primary_email} already exists")
-        raise_hardfail("Google Account #{primary_email} already exists")
+        raise_hardfail("Google Account #{primary_email} already exists",error:e)
       else
         raise
       end
@@ -66,7 +68,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
       Application.logger.info "Gram account #{uuid} successfully updated with google id #{gu.id}"
       notify_success(uuid,gu.id)
     else
-      Application.logger.error("Unable to update GrAM gapps_id of account #{uuid}" )
+      Application.logger.error("Unable to update GrAM gapps_id of account #{uuid}")
       raise_hardfail("Unable to update GrAM gapps_id of account #{uuid}")
     end
 
@@ -82,10 +84,12 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
 
   def notify_success(_uuid,google_id)
     data={
+      status: :success,
       uuid: _uuid.to_s,
       google_id: google_id.to_s
     }
-    GorgMessageSender.new.send_message(data,"notify.googleapps.user.created")
+    #GorgMessageSender.new.send_message(data,"notify.googleapps.user.created")
+    reply_with(data)
   end
 
   def uuid
@@ -106,8 +110,8 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::Base
   end
 
   def raise_already_registered_google_account
-    Application.logger.error("Accound #{uuid} already have a google acount registrered")
-    raise_hardfail("Accound #{uuid} already have a google acount registrered")
+    Application.logger.error("Account #{uuid} already have a google acount registrered")
+    raise_hardfail("Account #{uuid} already have a google acount registrered")
   end
 
 end
