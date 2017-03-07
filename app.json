@@ -15,6 +15,9 @@
     "GDD_GOOGLE_CLIENT_SECRET": {
       "required": false
     },
+    "GDD_SERVICE_ACCOUNT_CREDENTIALS": {
+      "required": false
+    },
     "GDD_GRAM_API_HOST": {
       "required": true
     },
