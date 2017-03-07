@@ -20,6 +20,7 @@ default: &default
   gram_api_user: admin
   gram_api_password: password
 
+  admin_user_id: alexandre.narbonne@poubs.org
 
 development:
   <<: *default
