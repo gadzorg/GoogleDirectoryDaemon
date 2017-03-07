@@ -1,6 +1,6 @@
 default: &default
   application_name: GorgLdapDaemon
-  application_id: ldapd-t
+  application_id: gdd
 
   rabbitmq_host: localhost
   rabbitmq_port: 5672
@@ -12,12 +12,13 @@ default: &default
   rabbitmq_user: guest
   rabbitmq_password: guest
 
+  logger_level: debug
 
-  log_routing_key: "agoram.log"
+  log_routing_key: "log"
 
   gram_api_host: https://gram-api-2.herokuapp.com/api/v2/
-  gram_api_user: 
-  gram_api_password: 
+  gram_api_user: admin
+  gram_api_password: password
 
 
 development:
