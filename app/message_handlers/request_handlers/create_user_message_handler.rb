@@ -42,7 +42,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
     @gram_account=retrieve_gram_data
     Application.logger.debug("Gram account :\n #{@gram_account.inspect}")
 
-    raise_already_registered_google_account if @gram_account.gapps_id
+    raise_already_registered_google_account(gapps_id: @gram_account.gapps_id) if @gram_account.gapps_id
 
     service=GramToGoogleService.new(@gram_account)
     gu=service.to_google_user
@@ -111,9 +111,9 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
       GramV2Client::Account.find(uuid, params:{show_password_hash: "true"})
   end
 
-  def raise_already_registered_google_account
+  def raise_already_registered_google_account(gapps_id: nil)
     Application.logger.error("Account #{uuid} already have a google acount registrered")
-    raise_hardfail("Account #{uuid} already have a google acount registrered",error_name: 'GoogleAccountAlreadyRegisteredInGrAM',data: {uuid: uuid}, status_code: 400)
+    raise_hardfail("Account #{uuid} already have a google acount registrered",error_name: 'GoogleAccountAlreadyRegisteredInGrAM',data: {uuid: uuid, gapps_id: gapps_id }, status_code: 400)
   end
 
 end
