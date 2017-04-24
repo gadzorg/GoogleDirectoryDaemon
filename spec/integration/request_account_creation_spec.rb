@@ -20,7 +20,9 @@ RSpec.describe "Request an account creation", type: :integration do
 
   let(:message) {GorgService::Message.new(event:'request.googleapps.user.create',
                                           data:valid_create_user_payload,
-                                          reply_to: Application.config['rabbitmq_event_exchange_name'])}
+                                          reply_to: Application.config['rabbitmq_event_exchange_name'],
+                                          soa_version: "2.0",
+  )}
 
   context "with no registered gapps" do
     let(:gapps_id) {nil}
@@ -57,10 +59,11 @@ RSpec.describe "Request an account creation", type: :integration do
         g_user=GUser.find(user_email)
         expect(LogMessageHandler).to have_received_a_message_with_routing_key("reply.googleapps.user.create")
         reply=LogMessageHandler.messages.select{|m| m.routing_key=="reply.googleapps.user.create"}.last
-        expect(reply.correlation_id).to eq(message.id)
-        expect(reply.data[:status]).to eq("success")
-        expect(reply.data[:uuid]).to eq("12345678-1234-1234-1234-123456789012")
-        expect(reply.data[:google_id]).to eq(g_user.id)
+        expect(reply).to have_attributes(
+                             correlation_id: message.id,
+                             data: {uuid: "12345678-1234-1234-1234-123456789012", google_id: g_user.id},
+                             status_code: 200,
+                         )
       end
 
       it "doesn't raise hardfail" do
@@ -82,7 +85,7 @@ RSpec.describe "Request an account creation", type: :integration do
         ).save
 
         GorgService::Producer.new.publish_message(message)
-        sleep(10)
+        sleep(8)
       end
 
       it "it doesn't change GUser attributes" do
@@ -99,8 +102,16 @@ RSpec.describe "Request an account creation", type: :integration do
       it "respond to the request with an error" do
         expect(LogMessageHandler).to have_received_a_message_with_routing_key("reply.googleapps.user.create")
         reply=LogMessageHandler.messages.select{|m| m.routing_key=="reply.googleapps.user.create"}.last
-        expect(reply.correlation_id).to eq(message.id)
-        expect(reply.data[:status]).to eq("hardfail")
+        expect(reply).to have_attributes(
+                             data: {
+                                 error_message:"Google Account #{user_email} already exists",
+                                 debug_message: "#<Google::Apis::ClientError: duplicate: Entity already exists.>",
+                                 error_data: {uuid: "12345678-1234-1234-1234-123456789012"},
+                             },
+                             status_code: 400,
+                             error_type: 'hardfail',
+                             error_name: "ExistingGoogleAccount"
+                         )
       end
 
       it "raise hardfail" do
@@ -119,7 +130,7 @@ RSpec.describe "Request an account creation", type: :integration do
 
     before(:each) do
       GorgService::Producer.new.publish_message(message)
-      sleep(2)
+      sleep(8)
     end
 
     it "Does not create a GUser" do
@@ -135,8 +146,16 @@ RSpec.describe "Request an account creation", type: :integration do
     it "respond to the request with an error" do
       expect(LogMessageHandler).to have_received_a_message_with_routing_key("reply.googleapps.user.create")
       reply=LogMessageHandler.messages.select{|m| m.routing_key=="reply.googleapps.user.create"}.last
-      expect(reply.correlation_id).to eq(message.id)
-      expect(reply.data[:status]).to eq("hardfail")
+      expect(reply).to have_attributes(
+                           data: {
+                               error_message:"Account 12345678-1234-1234-1234-123456789012 already have a google acount registrered",
+                               debug_message: nil,
+                               error_data: {uuid: "12345678-1234-1234-1234-123456789012"},
+                           },
+                           status_code: 400,
+                           error_type: 'hardfail',
+                           error_name: "GoogleAccountAlreadyRegisteredInGrAM"
+                       )
     end
 
     it "it raise a Hardfail" do

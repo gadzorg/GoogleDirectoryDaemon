@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'gram_v2_client', '~> 3.0'
-gem 'gorg_service', '~> 5.2'
+gem 'gorg_service', '~> 6.0'
 
 gem 'google-api-client'
 gem 'googleauth'

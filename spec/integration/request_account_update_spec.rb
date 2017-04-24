@@ -20,7 +20,9 @@ RSpec.describe "Request an account update", type: :integration do
 
   let(:message) {GorgService::Message.new(event:'request.googleapps.user.update',
                                           data:valid_create_user_payload,
-                                          reply_to: Application.config['rabbitmq_event_exchange_name'])}
+                                          reply_to: Application.config['rabbitmq_event_exchange_name'],
+                                          soa_version: "2.0",
+  )}
 
 
   context "existing GUser" do
@@ -49,13 +51,29 @@ RSpec.describe "Request an account update", type: :integration do
     before(:each) {gam.mock_get_request(with_password:true)}
     before(:each) do
       GorgService::Producer.new.publish_message(message)
-      sleep(10)
+      sleep(8)
     end
+
+
 
     it "update the GUser" do
       gu=GUser.find(user_email)
       expect(gu.name.given_name).to eq("New firstname")
       expect(gu.name.family_name).to eq("New lastname")
+    end
+
+    context "with new primary email" do
+
+      let(:valid_create_user_payload) {{
+          gram_account_uuid: "12345678-1234-1234-1234-123456789012",
+          primary_email: "new_#{user_name}@poubs.org",
+          aliases: aliases
+      }}
+
+      it "update pirmary email" do
+        gu=GUser.find(user_email)
+        expect(gu.primary_email).to eq("new_#{user_name}@poubs.org",)
+      end
     end
 
     it "doesn't raise hardfail" do
@@ -67,10 +85,11 @@ RSpec.describe "Request an account update", type: :integration do
       gu=GUser.find(user_email)
       expect(LogMessageHandler).to have_received_a_message_with_routing_key("reply.googleapps.user.update")
       reply=LogMessageHandler.messages.select{|m| m.routing_key=="reply.googleapps.user.update"}.last
-      expect(reply.correlation_id).to eq(message.id)
-      expect(reply.data[:status]).to eq("success")
-      expect(reply.data[:uuid]).to eq("12345678-1234-1234-1234-123456789012")
-      expect(reply.data[:google_id]).to eq(gu.id)
+      expect(reply).to have_attributes(
+                           correlation_id: message.id,
+                           data: {uuid: "12345678-1234-1234-1234-123456789012", google_id: g_user.id},
+                           status_code: 200,
+                       )
     end
 
 
@@ -88,7 +107,7 @@ RSpec.describe "Request an account update", type: :integration do
 
     before(:each) do
       GorgService::Producer.new.publish_message(message)
-      sleep(2)
+      sleep(8)
     end
 
     it "Does not modify data stored in GrAM" do
@@ -99,8 +118,16 @@ RSpec.describe "Request an account update", type: :integration do
     it "respond to the request with an error" do
       expect(LogMessageHandler).to have_received_a_message_with_routing_key("reply.googleapps.user.update")
       reply=LogMessageHandler.messages.select{|m| m.routing_key=="reply.googleapps.user.update"}.last
-      expect(reply.correlation_id).to eq(message.id)
-      expect(reply.data[:status]).to eq("hardfail")
+      expect(reply).to have_attributes(
+                           data: {
+                               error_message:"Google Account 987654321123456789987654321 does not exists",
+                               debug_message: "#<Google::Apis::ClientError: notFound: Resource Not Found: userKey>",
+                               error_data: nil,
+                           },
+                           status_code: 400,
+                           error_type: 'hardfail',
+                           error_name: "NotExistingGoogleAccount"
+                       )
     end
 
     it "it raise a Hardfail" do

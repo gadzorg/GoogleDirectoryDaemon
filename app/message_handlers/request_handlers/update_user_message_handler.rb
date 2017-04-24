@@ -58,7 +58,7 @@ class UpdateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
         case e.message
         when "notFound: Resource Not Found: userKey"
           Application.logger.error("Google Account #{gu.id} does not exists")
-          raise_hardfail("Google Account #{gu.id} does not exists")
+          raise_hardfail("Google Account #{gu.id} does not exists",error:e, error_name: 'NotExistingGoogleAccount', status_code: 400)
         else
           raise
         end
@@ -77,11 +77,13 @@ class UpdateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
 
   def notify_success(_uuid,google_id)
     data={
-      uuid: _uuid,
-      google_id: google_id,
-      status: :success
+        uuid: _uuid.to_s,
+        google_id: google_id.to_s
     }
-    reply_with(data)
+    reply_with(
+        data: data,
+        status_code: 200
+    )
   end
 
   def uuid

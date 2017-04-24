@@ -19,8 +19,8 @@ GEM
     bogus (0.1.6)
       dependor (>= 0.0.4)
     builder (3.2.3)
-    bunny (2.6.4)
-      amq-protocol (>= 2.0.1)
+    bunny (2.6.5)
+      amq-protocol (>= 2.1.0)
     byebug (9.0.6)
     codeclimate-test-reporter (1.0.6)
       simplecov
@@ -57,7 +57,7 @@ GEM
     gorg_message_sender (1.4.5)
       bunny (~> 2.2, >= 2.2.2)
       json-schema (~> 2.6)
-    gorg_service (5.2.0)
+    gorg_service (6.0.0)
       bunny (~> 2.2, >= 2.2.2)
       gorg_message_sender (~> 1.4.2)
       json-schema (~> 2.6)
@@ -136,7 +136,7 @@ DEPENDENCIES
   faker
   google-api-client
   googleauth
-  gorg_service (~> 5.2)
+  gorg_service (~> 6.0)
   gram_v2_client (~> 3.0)
   redis (~> 3.2)
   rspec
