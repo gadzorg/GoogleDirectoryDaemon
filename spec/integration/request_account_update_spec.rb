@@ -51,7 +51,7 @@ RSpec.describe "Request an account update", type: :integration do
     before(:each) {gam.mock_get_request(with_password:true)}
     before(:each) do
       GorgService::Producer.new.publish_message(message)
-      sleep(8)
+      sleep(10)
     end
 
 
@@ -71,7 +71,7 @@ RSpec.describe "Request an account update", type: :integration do
       }}
 
       it "update pirmary email" do
-        gu=GUser.find(user_email)
+        gu=GUser.find(gapps_id)
         expect(gu.primary_email).to eq("new_#{user_name}@poubs.org",)
       end
     end

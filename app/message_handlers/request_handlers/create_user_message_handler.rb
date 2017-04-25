@@ -57,7 +57,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
       case e.message
       when "duplicate: Entity already exists."
         Application.logger.error("Google Account #{primary_email} already exists")
-        raise_hardfail("Google Account #{primary_email} already exists",error:e, error_name: 'ExistingGoogleAccount',data: {uuid: uuid}, status_code: 400)
+        raise_hardfail("Google Account #{primary_email} already exists",error:e, error_name: 'ExistingGoogleAccount',data: {uuid: uuid}.merge(google_apps_debug_data(primary_email)), status_code: 400)
       else
         raise
       end
@@ -69,7 +69,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
       notify_success(uuid,gu.id)
     else
       Application.logger.error("Unable to update GrAM gapps_id of account #{uuid}")
-      raise_hardfail("Unable to update GrAM gapps_id of account #{uuid}",error_name: 'UnableToSaveGramUser',data: {uuid: uuid}, status_code: 500)
+      raise_hardfail("Unable to update GrAM gapps_id of account #{uuid}",error_name: 'UnableToSaveGramUser',data: {uuid: uuid, target_data: JSON.parse(ga.to_json).merge("password"=>"Hidden").to_json}, status_code: 500)
     end
 
 
@@ -113,7 +113,42 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
 
   def raise_already_registered_google_account(gapps_id: nil)
     Application.logger.error("Account #{uuid} already have a google acount registrered")
-    raise_hardfail("Account #{uuid} already have a google acount registrered",error_name: 'GoogleAccountAlreadyRegisteredInGrAM',data: {uuid: uuid, gapps_id: gapps_id }, status_code: 400)
+
+    debug_data={
+        uuid: uuid,
+        gapps_id: gapps_id
+    }
+
+    if gapps_id
+      debug_data.merge!(google_apps_debug_data(gapps_id))
+    end
+
+    raise_hardfail("Account #{uuid} already have a google acount registrered",error_name: 'GoogleAccountAlreadyRegisteredInGrAM',data: debug_data, status_code: 400)
+  end
+
+  def google_apps_debug_data(id)
+    begin
+      target_gapps=GUser.find(id)
+      if target_gapps
+        {
+            :gapps_id => target_gapps.id,
+            :gapps_primary_email => target_gapps.primary_email,
+            :gapps_external_ids => target_gapps.external_ids.to_json,
+            :gapps_last_login => target_gapps.last_login_time.to_s,
+        }
+      else
+        {
+            :gapps_search_id => id,
+            :gapps_primary_email => "NOT FOUND",
+        }
+      end
+    rescue Google::Apis::ClientError
+      {
+          :gapps_search_id => id,
+          :gapps_primary_email => "Error during API call",
+      }
+    end
+
   end
 
 end

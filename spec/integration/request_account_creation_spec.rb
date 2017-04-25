@@ -61,7 +61,8 @@ RSpec.describe "Request an account creation", type: :integration do
         reply=LogMessageHandler.messages.select{|m| m.routing_key=="reply.googleapps.user.create"}.last
         expect(reply).to have_attributes(
                              correlation_id: message.id,
-                             data: {uuid: "12345678-1234-1234-1234-123456789012", google_id: g_user.id},
+                             data: {uuid: "12345678-1234-1234-1234-123456789012",
+                                    google_id: g_user.id},
                              status_code: 200,
                          )
       end
@@ -73,7 +74,7 @@ RSpec.describe "Request an account creation", type: :integration do
 
     context "existing gapps" do
       before(:each) do
-        GUser.new({
+        @existing_guser=GUser.new({
                       name: {
                           given_name: "Old firstname",
                           family_name: "Old lastname",
@@ -106,7 +107,13 @@ RSpec.describe "Request an account creation", type: :integration do
                              data: {
                                  error_message:"Google Account #{user_email} already exists",
                                  debug_message: "#<Google::Apis::ClientError: duplicate: Entity already exists.>",
-                                 error_data: {uuid: "12345678-1234-1234-1234-123456789012"},
+                                 error_data: {
+                                     uuid: "12345678-1234-1234-1234-123456789012",
+                                     gapps_id: @existing_guser.id,
+                                     gapps_primary_email: user_email,
+                                     gapps_external_ids:"null",
+                                     gapps_last_login: "1970-01-01T00:00:00+00:00"
+                                 },
                              },
                              status_code: 400,
                              error_type: 'hardfail',
@@ -150,7 +157,12 @@ RSpec.describe "Request an account creation", type: :integration do
                            data: {
                                error_message:"Account 12345678-1234-1234-1234-123456789012 already have a google acount registrered",
                                debug_message: nil,
-                               error_data: {uuid: "12345678-1234-1234-1234-123456789012"},
+                               error_data: {
+                                   uuid: "12345678-1234-1234-1234-123456789012",
+                                   :gapps_id=> gapps_id,
+                                   :gapps_search_id=> gapps_id,
+                                   :gapps_primary_email=>"NOT FOUND"
+                               },
                            },
                            status_code: 400,
                            error_type: 'hardfail',
