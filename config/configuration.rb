@@ -1,4 +1,6 @@
-class GoogleDirectoryDaemon::Configuration
+require 'yaml'
+
+class Application::Configuration
 
   CONFIG_FILE_PATH=File.expand_path("../../config/config.yml",__FILE__)
 
@@ -12,7 +14,7 @@ class GoogleDirectoryDaemon::Configuration
   end
 
   def env_value(key)
-    env_var_name="GDD_#{key.to_s.upcase}"
+    env_var_name="#{Application.prefix}_#{key.to_s.upcase}"
     ENV[env_var_name]
   end
 end

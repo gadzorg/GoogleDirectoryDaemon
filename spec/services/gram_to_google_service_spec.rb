@@ -25,7 +25,7 @@ RSpec.describe GramToGoogleService, type: :service do
     expect(service.to_hash).to include(expected_hash)
   end
 
-    it "returns a google user" do
+  it "returns a google user" do
     service=GramToGoogleService.new(gram_account)
     gu=service.to_google_user
 

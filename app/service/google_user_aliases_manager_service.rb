@@ -27,10 +27,10 @@ class GoogleUserAliasesManagerService
   end
 
   def process
-    GoogleDirectoryDaemon.logger.debug "Current aliases : #{@user.all_aliases}"
-    GoogleDirectoryDaemon.logger.debug "Target aliases  : #{@target_aliases}"
-    GoogleDirectoryDaemon.logger.debug "Aliases to add  : #{to_create_aliases}"
-    GoogleDirectoryDaemon.logger.debug "Aliases to del  : #{to_remove_aliases}"
+    Application.logger.debug "Current aliases : #{@user.all_aliases}"
+    Application.logger.debug "Target aliases  : #{@target_aliases}"
+    Application.logger.debug "Aliases to add  : #{to_create_aliases}"
+    Application.logger.debug "Aliases to del  : #{to_remove_aliases}"
 
     if to_remove_aliases.any?||to_create_aliases.any?
       gservice.batch do
@@ -42,9 +42,9 @@ class GoogleUserAliasesManagerService
           add_alias a
         end
       end
-      GoogleDirectoryDaemon.logger.info "Aliases for #{@user.id} updated"
+      Application.logger.info "Aliases for #{@user.id} updated"
     else
-      GoogleDirectoryDaemon.logger.info "Aliases for #{@user.id} have not changed"
+      Application.logger.info "Aliases for #{@user.id} have not changed"
     end
   end
 
@@ -53,12 +53,12 @@ class GoogleUserAliasesManagerService
     def add_alias a
       ga=Google::Apis::AdminDirectoryV1::Alias.new(alias: a)
       gservice.insert_user_alias(user_key,ga)
-      GoogleDirectoryDaemon.logger.debug "Ordered to create alias #{a}"
+      Application.logger.debug "Ordered to create alias #{a}"
     end
 
     def remove_alias a
       gservice.delete_user_alias(user_key,a)
-      GoogleDirectoryDaemon.logger.debug "Ordered to delete alias #{a}"
+      Application.logger.debug "Ordered to delete alias #{a}"
     end
 
     def user_key
