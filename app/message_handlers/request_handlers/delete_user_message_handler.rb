@@ -3,7 +3,7 @@
 
 class DeleteUserMessageHandler < GorgService::Consumer::MessageHandler::RequestHandler
 
-  listen_to 'request.googleapps.user.update'
+  listen_to 'request.googleapps.user.delete'
 
   def process
 
