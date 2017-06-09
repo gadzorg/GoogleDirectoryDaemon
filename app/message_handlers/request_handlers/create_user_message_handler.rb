@@ -42,7 +42,7 @@ class CreateUserMessageHandler < GorgService::Consumer::MessageHandler::RequestH
     @gram_account=retrieve_gram_data
     Application.logger.debug("Gram account :\n #{@gram_account.inspect}")
 
-    raise_already_registered_google_account(gapps_id: @gram_account.gapps_id) if @gram_account.gapps_id
+    raise_already_registered_google_account(gapps_id: @gram_account.gapps_id) if @gram_account.gapps_id && !(@gram_account.gapps_id.match(/\A\s*\Z/)) #Not blank
 
     service=GramToGoogleService.new(@gram_account)
     gu=service.to_google_user
