@@ -16,7 +16,8 @@ default: &default
 
   log_routing_key: "log"
 
-  gram_api_host: https://gram-api-2.herokuapp.com/api/v2/
+  # Anyway, api requests are mocked
+  gram_api_host: https://rec-gram-api-2.herokuapp.com/api/v2/
   gram_api_user: admin
   gram_api_password: password
 
