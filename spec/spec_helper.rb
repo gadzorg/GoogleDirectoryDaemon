@@ -1,7 +1,7 @@
 require "simplecov"
 SimpleCov.start
 
-require 'factory_girl'
+require 'factory_bot'
 
 require 'webmock/rspec'
 WebMock.disable_net_connect!(allow_localhost: true, allow: 'www.googleapis.com')
@@ -15,10 +15,10 @@ require APP_PATH
 
 RSpec.configure do |config|
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
-    FactoryGirl.find_definitions
+    FactoryBot.find_definitions
   end
 
 

@@ -22,6 +22,6 @@ gem 'webmock'
 group :development, :test do
   gem 'rspec'
   gem 'bogus'
-  gem "factory_girl", "~> 4.0"
+  gem "factory_bot"
   gem 'faker'
 end
