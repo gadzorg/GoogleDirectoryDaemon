@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby File.read(".ruby-version").strip
 
-gem 'gram_v2_client', '~> 3.0'
+gem 'gram_v2_client', git: "https://github.com/gadzorg/gram2_api_client_ruby"
 gem 'gorg_service', '~> 6.0'
 
 gem 'google-api-client'

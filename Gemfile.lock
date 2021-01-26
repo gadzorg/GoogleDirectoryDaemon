@@ -1,29 +1,41 @@
+GIT
+  remote: https://github.com/gadzorg/gram2_api_client_ruby
+  revision: 469971c3375f470a26f25546db7de54ccd82093b
+  specs:
+    gram_v2_client (3.0.6)
+      activeresource (>= 5.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (4.2.8)
-      activesupport (= 4.2.8)
+    activemodel (6.0.3.4)
+      activesupport (= 6.0.3.4)
+    activemodel-serializers-xml (1.0.2)
+      activemodel (> 5.x)
+      activesupport (> 5.x)
       builder (~> 3.1)
-    activeresource (4.1.0)
-      activemodel (~> 4.0)
-      activesupport (~> 4.0)
-      rails-observers (~> 0.1.2)
-    activesupport (4.2.8)
-      i18n (~> 0.7)
+    activeresource (5.1.1)
+      activemodel (>= 5.0, < 7)
+      activemodel-serializers-xml (~> 1.0)
+      activesupport (>= 5.0, < 7)
+    activesupport (6.0.3.4)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
+      zeitwerk (~> 2.2, >= 2.2.2)
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
     amq-protocol (2.1.0)
     bogus (0.1.6)
       dependor (>= 0.0.4)
-    builder (3.2.3)
+    builder (3.2.4)
     bunny (2.6.5)
       amq-protocol (>= 2.1.0)
     byebug (9.0.6)
     codeclimate-test-reporter (1.0.6)
       simplecov
+    concurrent-ruby (1.1.8)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     declarative (0.0.9)
@@ -61,12 +73,11 @@ GEM
       bunny (~> 2.2, >= 2.2.2)
       gorg_message_sender (~> 1.4.2)
       json-schema (~> 2.6)
-    gram_v2_client (3.0.0)
-      activeresource (~> 4.0)
     hashdiff (0.3.2)
     httpclient (2.8.3)
     hurley (0.2)
-    i18n (0.8.1)
+    i18n (0.9.5)
+      concurrent-ruby (~> 1.0)
     json (2.0.3)
     json-schema (2.8.0)
       addressable (>= 2.4)
@@ -79,13 +90,11 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    minitest (5.10.1)
+    minitest (5.14.3)
     multi_json (1.12.1)
     multipart-post (2.0.0)
     os (0.9.6)
     public_suffix (2.0.5)
-    rails-observers (0.1.2)
-      activemodel (~> 4.0)
     redis (3.3.3)
     representable (3.0.3)
       declarative (< 0.1.0)
@@ -117,13 +126,14 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
     thread_safe (0.3.6)
-    tzinfo (1.2.2)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uber (0.1.0)
     webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
@@ -137,7 +147,7 @@ DEPENDENCIES
   google-api-client
   googleauth
   gorg_service (~> 6.0)
-  gram_v2_client (~> 3.0)
+  gram_v2_client!
   redis (~> 3.2)
   rspec
   simplecov
