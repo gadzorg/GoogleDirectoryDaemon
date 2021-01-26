@@ -121,7 +121,7 @@ RSpec.describe "Request an account update", type: :integration do
       expect(reply).to have_attributes(
                            data: {
                                error_message:"Google Account 987654321123456789987654321 does not exists",
-                               debug_message: "#<Google::Apis::ClientError: notFound: Resource Not Found: userKey>",
+                               debug_message: a_string_including("Google::Apis::ClientError: notFound: Resource Not Found: userKey"),
                                error_data: nil,
                            },
                            status_code: 400,
