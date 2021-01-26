@@ -4,7 +4,7 @@ SimpleCov.start
 require 'factory_bot'
 
 require 'webmock/rspec'
-WebMock.disable_net_connect!(allow_localhost: true, allow: 'www.googleapis.com')
+WebMock.disable_net_connect!(allow_localhost: true, allow: %w[www.googleapis.com admin.googleapis.com])
 
 APP_PATH = File.expand_path('../../config/boot', __FILE__)
 ENV['RAKE_ENV']="test"
