@@ -36,8 +36,8 @@ GEM
     codeclimate-test-reporter (1.0.6)
       simplecov
     concurrent-ruby (1.1.8)
-    crack (0.4.3)
-      safe_yaml (~> 1.0.0)
+    crack (0.4.5)
+      rexml
     declarative (0.0.9)
     declarative-option (0.1.0)
     dependor (1.0.1)
@@ -73,7 +73,7 @@ GEM
       bunny (~> 2.2, >= 2.2.2)
       gorg_message_sender (~> 1.4.2)
       json-schema (~> 2.6)
-    hashdiff (0.3.2)
+    hashdiff (1.0.1)
     httpclient (2.8.3)
     hurley (0.2)
     i18n (0.9.5)
@@ -101,6 +101,7 @@ GEM
       declarative-option (< 0.2.0)
       uber (< 0.2.0)
     retriable (3.0.1)
+    rexml (3.2.4)
     rspec (3.5.0)
       rspec-core (~> 3.5.0)
       rspec-expectations (~> 3.5.0)
@@ -114,7 +115,6 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
-    safe_yaml (1.0.4)
     signet (0.7.3)
       addressable (~> 2.3)
       faraday (~> 0.9)
@@ -129,10 +129,10 @@ GEM
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uber (0.1.0)
-    webmock (2.3.2)
+    webmock (3.11.1)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     zeitwerk (2.4.2)
 
 PLATFORMS
