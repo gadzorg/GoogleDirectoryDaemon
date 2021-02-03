@@ -106,7 +106,7 @@ RSpec.describe "Request an account creation", type: :integration do
         expect(reply).to have_attributes(
                              data: {
                                  error_message:"Google Account #{user_email} already exists",
-                                 debug_message: "#<Google::Apis::ClientError: duplicate: Entity already exists.>",
+                                 debug_message: a_string_including("Google::Apis::ClientError: duplicate: Entity already exists."),
                                  error_data: {
                                      uuid: "12345678-1234-1234-1234-123456789012",
                                      gapps_id: @existing_guser.id,

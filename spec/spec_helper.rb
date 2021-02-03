@@ -1,10 +1,10 @@
 require "simplecov"
 SimpleCov.start
 
-require 'factory_girl'
+require 'factory_bot'
 
 require 'webmock/rspec'
-WebMock.disable_net_connect!(allow_localhost: true, allow: 'www.googleapis.com')
+WebMock.disable_net_connect!(allow_localhost: true, allow: %w[www.googleapis.com admin.googleapis.com])
 
 APP_PATH = File.expand_path('../../config/boot', __FILE__)
 ENV['RAKE_ENV']="test"
@@ -15,10 +15,10 @@ require APP_PATH
 
 RSpec.configure do |config|
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.before(:suite) do
-    FactoryGirl.find_definitions
+    FactoryBot.find_definitions
   end
 
 
@@ -34,3 +34,4 @@ end
 
 require 'faker'
 require 'support/factories'
+

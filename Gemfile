@@ -1,6 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'gram_v2_client', '~> 3.0'
+ruby File.read(".ruby-version").strip
+
+gem 'gram_v2_client', git: "https://github.com/gadzorg/gram2_api_client_ruby"
 gem 'gorg_service', '~> 6.0'
 
 gem 'google-api-client'
@@ -20,6 +22,6 @@ gem 'webmock'
 group :development, :test do
   gem 'rspec'
   gem 'bogus'
-  gem "factory_girl", "~> 4.0"
+  gem "factory_bot"
   gem 'faker'
 end
